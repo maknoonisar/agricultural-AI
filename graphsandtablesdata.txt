@@ -1,0 +1,256 @@
+# Agri-Vision System: Graphs and Tables Data Guide
+
+This document provides details about the data structures, formats, and sources used in the various graphs, tables, and visualizations in the Agri-Vision System.
+
+## Dashboard Page
+
+### Farm Overview Card
+- Data Structure: Dictionary with farm name, total area, number of fields, and health score
+- Source: Generated in `data_processor.load_sample_data('farm_overview')`
+- Format Example:
+```
+{
+  "farm_name": "Green Acres Farm",
+  "total_area": 120,
+  "num_fields": 4,
+  "health_score": 82
+}
+```
+
+### Crop Distribution Chart
+- Data Structure: Dataframe with crop types and areas
+- Source: Generated in `data_processor.load_sample_data('crop_distribution')`
+- Format Example:
+```
+  crop_type  area_acres  percentage
+0     Wheat          50        41.7
+1      Rice          30        25.0
+2    Cotton          20        16.7
+3 Sugarcane          15        12.5
+4   Mustard           5         4.1
+```
+
+### Weather Forecast
+- Data Structure: Dataframe with date, temperature, precipitation, and conditions
+- Source: Generated in `weather_api.get_weather_forecast()`
+- Format Example:
+```
+        date  temp_max  temp_min  precipitation humidity  wind conditions
+0 2025-04-22        32        22             0       65    12 Sunny
+1 2025-04-23        33        23             0       62    14 Sunny
+2 2025-04-24        30        21            10       75    10 Partly Cloudy
+3 2025-04-25        28        19            25       85     8 Rain
+4 2025-04-26        29        20             5       75    12 Partly Cloudy
+5 2025-04-27        31        21             0       65    10 Sunny
+6 2025-04-28        32        22             0       60    15 Sunny
+```
+
+### Field Health Table
+- Data Structure: Dataframe with field name, crop type, health score, status, and recommended actions
+- Source: Generated in `data_processor.load_sample_data('field_health')`
+- Format Example:
+```
+      field_name crop_type  health_score      status                 recommendation
+0   North Field     Wheat            82        Good       Schedule regular irrigation
+1   South Field      Rice            90  Excellent                   Maintain regime
+2    East Field    Cotton            65  Attention            Apply foliar nutrients
+3    West Field Sugarcane            78        Good  Check for pest signs next week
+```
+
+## Crop Health Page
+
+### NDVI Map
+- Data Structure: Field and cell data for MapBox visualization
+- Source: Generated in `mapbox_utils.create_crop_health_map()`
+- Format Details:
+  - Field data: List of dictionaries with field name, type, coordinates, and health metrics
+  - Cell data: Grid cells with NDVI values for detailed visualization
+  - NDVI ranges: 0.8+ (Excellent), 0.6-0.8 (Good), 0.4-0.6 (Moderate), <0.4 (Poor)
+
+### Health Metrics Table
+- Data Structure: Dataframe with metric name, value, status, and trend
+- Source: Generated in `crop_analysis.get_crop_health_metrics()`
+- Format Example:
+```
+                 metric    value      status  trend_pct
+0                   NDVI     0.72        Good       5.5
+1       Chlorophyll Index    45.30        Good       3.2
+2  Leaf Area Index (LAI)     3.80  Excellent       7.5
+3    Vegetation Coverage    82.50        Good      -1.5
+4       Biomass Estimate   950.75  Excellent       4.3
+```
+
+### Disease Detection
+- Data Structure: Results from image analysis
+- Source: Generated in `crop_analysis.analyze_crop_image()`
+- Format Example:
+```
+{
+  "has_disease": True,
+  "disease_name": "Leaf Rust",
+  "confidence": 87.5,
+  "affected_area_percent": 15.3,
+  "severity": "Moderate",
+  "recommendations": [
+    "Apply fungicide treatment within 48 hours",
+    "Increase spacing between plants for better air circulation",
+    "Monitor neighboring fields for signs of spread"
+  ]
+}
+```
+
+## Yield Forecast Page
+
+### Yield Prediction Table
+- Data Structure: Dataframe with field, crop type, forecast yield, previous yield, and change percentage
+- Source: Generated in `data_processor.load_sample_data('yield_forecast')`
+- Format Example:
+```
+      field_name crop_type  forecast_yield  previous_yield  change_pct risk_factor
+0   North Field     Wheat             4.5             4.2        7.14         Low
+1   South Field      Rice             4.3             4.1        4.88         Low
+2    East Field    Cotton             2.8             2.5       12.00      Medium
+3    West Field Sugarcane            95.0            90.0        5.56         Low
+```
+
+### Yield Forecast Map
+- Data Structure: Field and cell data for MapBox visualization
+- Source: Generated in `mapbox_utils.create_yield_forecast_map()`
+- Format Details:
+  - Field data: List of dictionaries with field name, area, yield forecast, and coordinates
+  - Cell data: Grid cells with yield values for detailed visualization
+  - Color scale: Viridis color scale from low yield (dark blue) to high yield (yellow)
+
+### Yield Trends Chart
+- Data Structure: Dataframe with seasons and yield values for different fields
+- Source: Generated in `visualization.create_yield_chart()`
+- Format Example:
+```
+     season North Field South Field East Field West Field
+0   Kharif 2023        3.8        3.5       2.3      85.0
+1    Rabi 2023-24      4.2        4.1       2.5      90.0
+2   Kharif 2024        4.0        3.9       2.7      92.0
+3    Rabi 2024-25      4.5        4.3       2.8      95.0
+```
+
+## Resource Optimization Page
+
+### Water Usage Table
+- Data Structure: Dataframe with field, current usage, optimal usage, and efficiency
+- Source: Generated in `data_processor.load_sample_data('water_usage')`
+- Format Example:
+```
+      field_name crop_type  current_usage  optimal_usage  efficiency_pct recommendations
+0   North Field     Wheat             78             65         83.3     Reduce irrigation by 15%
+1   South Field      Rice             65             60         92.3     Minor reduction needed
+2    East Field    Cotton             92             70         76.1     Significant reduction needed
+3    West Field Sugarcane             71             65         91.5     Minor reduction needed
+```
+
+### Nutrient Balance Table
+- Data Structure: Dataframe with field, current nutrient levels (N, P, K), and optimal levels
+- Source: Generated in `data_processor.load_sample_data('nutrient_levels')`
+- Format Example:
+```
+      field_name crop_type  N_current  N_optimal  P_current  P_optimal  K_current  K_optimal          recommendation
+0   North Field     Wheat        120        110         35         30         80         85       Reduce N, increase K
+1   South Field      Rice         90        100         28         30         65         75  Increase all nutrients
+2    East Field    Cotton        150        120         42         35         95         80      Reduce all nutrients
+3    West Field Sugarcane        110        110         30         30         75         75            Maintain levels
+```
+
+### Resource Efficiency Map
+- Data Structure: Field and cell data for MapBox visualization
+- Source: Generated in `mapbox_utils.create_resource_map()`
+- Format Details:
+  - Field data: List of dictionaries with field name, resource usage, and coordinates
+  - Cell data: Grid cells with resource efficiency values
+  - Color scale: Blue (efficient), Green (optimal), Yellow (moderate overuse), Red (severe overuse)
+
+## Weather Data Page
+
+### Current Conditions Table
+- Data Structure: Dataframe with location, temperature, humidity, wind, and conditions
+- Source: Generated in `weather_api.get_weather_forecast()`
+- Format Example:
+```
+     location  temperature  humidity  wind_speed    conditions  precipitation
+0      Lahore           32        65          12 Partly Cloudy             0
+1      Multan           33        60          15         Sunny             0
+2  Faisalabad           31        68          10 Partly Cloudy             0
+3   Islamabad           28        75           8    Light Rain             5
+```
+
+### Agricultural Impact Table
+- Data Structure: Dataframe with metric, value, impact, and recommendations
+- Source: Generated in `weather_api.get_agricultural_weather_metrics()`
+- Format Example:
+```
+                   metric    value     impact                     recommendation
+0   Growing Degree Days (GDD)    12.5   Positive               Crops developing on schedule
+1     Chilling Hours Remaining     0.0   Neutral                 Not applicable this season
+2  Potential Evapotranspiration     5.8   Caution         Consider irrigation for shallow-rooted crops
+3               Frost Risk Index     0.0   Neutral                  No frost risk in forecast
+4               Drought Index     32.0   Caution       Monitor soil moisture in affected areas
+```
+
+### Weather Alert Table
+- Data Structure: Dataframe with alert type, severity, locations affected, and recommendations
+- Source: Generated in `weather_api.get_weather_alert_level()`
+- Format Example:
+```
+          alert_type    severity                     locations                                   action
+0      Extreme Heat    Moderate     Multan, Karachi, Hyderabad     Ensure adequate irrigation, mulch soil
+1      High Rainfall         Low                    Islamabad     Check drainage systems are clear
+2  Strong Winds Risk         Low               Coastal areas     Secure vulnerable plants and structures
+```
+
+## Reports Page
+
+### Season Summary Table
+- Data Structure: Dataframe with metrics, current season values, previous season, and change
+- Source: Generated in `data_processor.load_sample_data('season_summary')`
+- Format Example:
+```
+                   metric current_season previous_season  change_pct
+0             Total Yield         420.50          395.25        6.39
+1         Average NDVI Peak           0.76            0.72        5.56
+2      Water Usage (mm/ha)         650.00          700.00       -7.14
+3  Fertilizer Usage (kg/ha)         275.00          300.00       -8.33
+4          Farm Profit (%)          32.50           29.75        9.24
+```
+
+### Field Comparison Table
+- Data Structure: Dataframe with field names and various performance metrics
+- Source: Generated in `data_processor.load_sample_data('field_comparison')`
+- Format Example:
+```
+      field_name     crop  yield  water_efficiency  nutrient_efficiency  profit_margin
+0   North Field    Wheat    4.5              0.83                 0.92           0.35
+1   South Field     Rice    4.3              0.92                 0.85           0.32
+2    East Field   Cotton    2.8              0.76                 0.78           0.40
+3    West Field Sugarcane   95.0              0.92                 0.95           0.30
+```
+
+## Data Processing Functions
+
+### load_sample_data() Parameters
+- 'farm_overview': General farm information
+- 'crop_distribution': Crop type distribution data
+- 'field_health': Field health status and recommendations
+- 'yield_forecast': Yield prediction data by field
+- 'water_usage': Water usage and efficiency by field
+- 'nutrient_levels': Nutrient balance data by field
+- 'season_summary': Season comparison data
+- 'field_comparison': Field performance comparison data
+
+### process_uploaded_data() Parameters
+- 'crop': Process uploaded crop data (CSV/Excel)
+- 'soil': Process uploaded soil test data (CSV/Excel)
+- 'weather': Process uploaded weather data (CSV/Excel)
+- 'image': Process uploaded crop images (JPG/PNG)
+
+### aggregate_data() Parameters
+- 'field': Aggregate data by field
+- 'crop': Aggregate data by crop type
+- 'time': Aggregate data by time period (day, week, month, season)

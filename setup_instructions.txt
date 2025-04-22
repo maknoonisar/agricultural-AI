@@ -1,0 +1,106 @@
+# Agri-Vision System: Quick Setup Instructions
+
+This document provides instructions for setting up and maintaining the Agri-Vision System, including how to fix common issues and configure missing components.
+
+## Initial Setup
+
+1. Clone the repository or download the project files
+2. Install required dependencies:
+   ```
+   pip install streamlit pandas numpy plotly twilio
+   ```
+3. Run the application:
+   ```
+   streamlit run app.py
+   ```
+
+## Configuring Email and SMS Notifications
+
+To enable the notification features, you need to set up environment variables:
+
+### For Email Notifications:
+1. Create a `.env` file in the project root
+2. Add the following variables:
+   ```
+   EMAIL_SENDER=your-email@gmail.com
+   EMAIL_PASSWORD=your-app-password
+   SMTP_SERVER=smtp.gmail.com
+   SMTP_PORT=587
+   ```
+3. For Gmail, you'll need to create an App Password (requires 2-Step Verification)
+
+### For SMS Notifications (Twilio):
+1. Sign up for a Twilio account at https://www.twilio.com/
+2. Get your Account SID and Auth Token from the Twilio Console
+3. Purchase a Twilio phone number with SMS capabilities
+4. Add the following variables to your `.env` file:
+   ```
+   TWILIO_ACCOUNT_SID=your-account-sid
+   TWILIO_AUTH_TOKEN=your-auth-token
+   TWILIO_PHONE_NUMBER=your-twilio-phone-number
+   ```
+
+## Common Issues and Fixes
+
+### MapBox Visualizations Not Working
+
+1. Check if the MapBox token is set correctly in the application
+2. If using hex_to_rgb function causes errors, replace with direct RGBA color values:
+   ```python
+   # Replace this:
+   fillcolor=f"rgba({','.join([str(c) for c in px.colors.hex_to_rgb(color)])}, 0.5)"
+   
+   # With this:
+   fillcolor=f"rgba(50,150,255,0.5)"  # Example blue color with opacity
+   ```
+
+### SMS Notifications Failing
+
+1. Verify your Twilio credentials are correct
+2. Ensure the recipient phone number is in E.164 format (e.g., +923001234567)
+3. Check your Twilio account balance and status
+4. Modify the `utils/notification.py` file to debug any Twilio API issues
+
+### Email Notifications Failing
+
+1. Check if your email and password are correct
+2. If using Gmail, ensure you're using an App Password, not your regular password
+3. Verify that "Less secure app access" is enabled or use OAuth2 authentication
+
+## Extending the Application
+
+### Adding New Crop Types
+
+1. Update the crop selection dropdowns in the relevant pages
+2. Add corresponding data for the new crop types in the data processors
+3. Update visualization colors and thresholds as needed
+
+### Adding New Visualization Types
+
+1. Create a new function in `utils/visualization.py`
+2. Import and use the function in the appropriate page
+3. Make sure to handle all data cases and provide fallbacks
+
+### Implementing Database Storage
+
+1. Follow the `database_integration_guide.md` document
+2. Update data loading functions to use the database
+3. Implement data saving functionality for user uploads and settings
+
+## Updating MapBox Token
+
+1. Create an account at https://www.mapbox.com/
+2. Generate a new public token
+3. Replace the token in all files where it's used:
+   - pages/1_Dashboard.py
+   - pages/2_Crop_Health.py
+   - pages/3_Yield_Forecast.py
+   - pages/4_Resource_Optimization.py
+   - pages/5_Weather_Data.py
+   - utils/mapbox_utils.py
+
+## Contact for Support
+
+If you encounter issues not covered in this guide, please contact:
+- Technical Support: [Your Technical Contact]
+- Project Maintainer: [Your Name/Contact]
