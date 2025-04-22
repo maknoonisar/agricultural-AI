@@ -15,6 +15,9 @@ The Agri-Vision System is an AI-powered agricultural intelligence platform that 
 - **Weather Data Integration**: Real-time weather data and forecasts with agricultural impact analysis
 - **Comprehensive Reports**: Detailed insights and recommendations in downloadable formats
 
+## Video 
+[![Watch the demo](https://img.youtube.com/vi/pndHDTxONmE/0.jpg)](https://youtu.be/pndHDTxONmE)
+
 ## Technology Stack
 
 - **Frontend**: Streamlit for interactive web interface with multipage support
